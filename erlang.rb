@@ -38,7 +38,7 @@ def find_imports(directory = '.')
     if file_name =~ /\.erl$/
       IO.foreach(file_path) do |line|
         if not line =~ /^\b*%/
-          line.scan(/\b([a-z][a-z0-9_]*):([a-z_][a-z0-9_]*)/).each do |mod, func|
+          line.scan(/\b([a-zA-Z][a-zA-Z0-9_]*):([a-z_][a-z0-9_]*)/).each do |mod, func|
             imports[file_path] ||= {}
             imports[file_path][mod] ||= ErlangModule.new(mod)
             imports[file_path][mod].import_function(func)
