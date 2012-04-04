@@ -31,7 +31,8 @@ class Export
   end
 end
 
-def find_imports(directory = '.')
+def find_imports(params = {})
+  directory = params[:directory] || "."
   imports = {}
   Find.find(directory) do |file_path|
     file_name = File.basename(file_path)
@@ -40,6 +41,11 @@ def find_imports(directory = '.')
         if not line =~ /^\b*%/
           line.scan(/\b([a-zA-Z][a-zA-Z0-9_]*):([a-z_][a-z0-9_]*)/).each do |mod, func|
             imports[file_path] ||= {}
+
+            if not params[:include_otp] and is_otp_module(mod)
+              next
+            end
+
             imports[file_path][mod] ||= ErlangModule.new(mod)
             imports[file_path][mod].import_function(func)
           end
@@ -50,9 +56,9 @@ def find_imports(directory = '.')
   imports
 end
 
-def find_exports(directory = '.')
+def find_exports(params = {})
+  directory = params[:directory] || "."
   exports = {}
-
   Find.find('.') do |file_path|
     file_name = File.basename(file_path)
     if file_name =~ /\.erl$/
@@ -68,7 +74,19 @@ def find_exports(directory = '.')
   exports
 end
 
-def is_otp_module(module_name)
-  otp_module_names = [ "erlang" ]
-  otp_module_names.include?(module_name)
+def is_otp_module(module_name) 
+
+  otp_module_names = [ "erlang", "lists", "gb_trees", "proplists",
+  "gen_server", "io", "ets", "string", "io_lib", "array", "base64",
+  "beam_lib", "binary", "c", "calendar", "dets", "dict", "digraph",
+  "epp", "digraph_utils", "erl_eval", "erl_expand_records",
+  "erl_id_trans", "erl_internal", "erl_lint", "erl_parse", "erl_pp",
+  "erl_scan", "erl_tar", "file_sorter" "filelib" "filename",
+  "gb_sets", "gen_event", "gen_fsm", "lib", "log_mf_h", "math",
+  "ms_transform", "orddict", "ordsets", "pg", "pool", "proc_lib",
+  "qlc", "queue", "random", "re", "sets", "shell", "slave", "sofs",
+  "supervisor", "supervisor_bridge", "sys", "timer", "unicode",
+  "win32reg", "zip" ]
+
+  otp_module_names.include?(module_name) 
 end

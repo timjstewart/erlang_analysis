@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 require_relative "erlang"
 
+exclude_otp = ARGV.include?("-e")
+
 if ARGV.include?("-t") # use tree format
 
-  find_imports.each do |importing_file,imports|
+  find_imports(:include_otp => !exclude_otp).each do |importing_file,imports|
     puts "#{File.basename(importing_file)}: "
     import_count = imports.length
     n = 1
