@@ -1,0 +1,21 @@
+Ruby Scripts for analyzing Erlang Code
+
+Installation:
+
+  chmod +x imports
+  chmod +x exports
+
+Running:
+
+  ./imports                # parse all erlang source files in current directory and display
+                           # their imports in colon delimited format
+
+  ./imports -t             # parse all erlang source files in current directory and display
+                           # their imports as a tree.
+
+
+  ./exports                # parse all erlang source files in current directory and display
+                           # their imports in colon delimited format
+
+  ./exports -t             # parse all erlang source files in current directory and display
+                           # their imports as a tree.

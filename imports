@@ -1,0 +1,44 @@
+#! env ruby
+# -*- coding: utf-8 -*-
+require_relative "erlang"
+
+if ARGV.include?("-t") # use tree format
+
+  find_imports.each do |importing_file,imports|
+    puts "#{File.basename(importing_file)}: "
+    import_count = imports.length
+    n = 1
+    imports.each do |mod_name, mod|
+      if n < import_count
+        puts "├── #{mod_name}"
+      else
+        puts "└── #{mod_name}"
+      end
+      mod.functions.each_with_index do |import, index|
+        if n < import_count
+          print "│"
+        end
+        if index < mod.functions.length - 1
+          puts "    ├── #{import.to_s}"
+        else
+          puts "    └── #{import.to_s}"
+        end
+      end
+      n = n + 1
+    end
+  end
+
+else
+
+  find_imports.each do |importing_file,imports|
+    imports.each do |mod_name, mod|
+      if ARGV.include?("-e") and is_otp_module(mod_name)
+        next
+      end
+      mod.functions.each do |import|
+        puts "#{importing_file}:#{mod_name}:#{import.to_s}"
+      end
+    end
+  end
+
+end
