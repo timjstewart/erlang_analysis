@@ -1,5 +1,9 @@
 Ruby Scripts for analyzing Erlang Code
 
+Requirements:
+
+  ruby
+
 Installation:
 
   chmod +x imports
