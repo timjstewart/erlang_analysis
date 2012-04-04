@@ -27,3 +27,10 @@ Running:
   ./imports -t -e          # parse all erlang source files in current directory 
                            # and display their imports as a tree (excluding OTP
                            # modules).
+
+  ./erefs module:function  # parse all erlang source files in current directory
+                           # and print all modules that call module:function
+
+  ./erefs function         # parse all erlang source files in current directory
+                           # and print all modules that call function regardless
+                           # of the module.
