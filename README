@@ -23,3 +23,7 @@ Running:
 
   ./exports -t             # parse all erlang source files in current directory 
                            # and display their imports as a tree.
+
+  ./imports -t -e          # parse all erlang source files in current directory 
+                           # and display their imports as a tree (excluding OTP
+                           # modules
