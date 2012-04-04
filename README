@@ -7,15 +7,15 @@ Installation:
 
 Running:
 
-  ./imports                # parse all erlang source files in current directory and display
-                           # their imports in colon delimited format
+  ./imports                # parse all erlang source files in current directory
+                           # and display their imports in colon delimited format
 
-  ./imports -t             # parse all erlang source files in current directory and display
-                           # their imports as a tree.
+  ./imports -t             # parse all erlang source files in current directory 
+  						   # and display their imports as a tree.
 
 
-  ./exports                # parse all erlang source files in current directory and display
-                           # their imports in colon delimited format
+  ./exports                # parse all erlang source files in current directory 
+  						   # and display their imports in colon delimited format
 
-  ./exports -t             # parse all erlang source files in current directory and display
-                           # their imports as a tree.
+  ./exports -t             # parse all erlang source files in current directory 
+  						   # and display their imports as a tree.
