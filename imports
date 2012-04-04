@@ -17,11 +17,13 @@ if ARGV.include?("-t") # use tree format
       mod.functions.each_with_index do |import, index|
         if n < import_count
           print "│"
+        else
+          print " "
         end
         if index < mod.functions.length - 1
-          puts "    ├── #{import.to_s}"
+          puts "   ├── #{import.to_s}"
         else
-          puts "    └── #{import.to_s}"
+          puts "   └── #{import.to_s}"
         end
       end
       n = n + 1
