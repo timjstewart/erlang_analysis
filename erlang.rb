@@ -1,10 +1,13 @@
 require 'find'
 
 class ErlangModule
-  attr_reader :mod, :functions
+  attr_reader :mod
   def initialize(mod)
     @mod = mod
     @functions = []
+  end
+  def functions()
+    @functions.sort
   end
   def import_function(func)
     unless @functions.include?(func)
@@ -18,6 +21,7 @@ end
 
 class Export
   attr_reader :name, :arity
+  include Comparable
   def initialize(name, arity)
     @name = name
     @arity = arity
@@ -28,6 +32,9 @@ class Export
   def is_otp_export
     otp_exports = ["handle_call", "handle_cast", "start_link", "handle_info", "code_change", "start", "stop" ]
     otp_exports.include? @name
+  end
+  def <=>(other)
+    @name <=> other.name
   end
 end
 
@@ -63,11 +70,12 @@ def find_exports(params = {})
     file_name = File.basename(file_path)
     if file_name =~ /\.erl$/
       IO.foreach(file_path) do |line|
-        line.scan(/([a-z0-9_]+)\/([0-9]+)/).each do |name, arity|
+        line.scan(/([a-z_]+)\/([0-9]+)/).each do |name, arity|
           exports[file_path] ||= []
           exports[file_path] << Export.new(name, arity.to_i)
         end
       end
+      exports[file_path].sort! if exports[file_path]
     end
   end
 

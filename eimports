@@ -7,7 +7,7 @@ exclude_otp = ARGV.include?("-e")
 if ARGV.include?("-t") # use tree format
 
   find_imports(:include_otp => !exclude_otp).each do |importing_file,imports|
-    puts "#{File.basename(importing_file)}: "
+    puts "#{File.basename(importing_file)}"
     import_count = imports.length
     n = 1
     imports.each do |mod_name, mod|
