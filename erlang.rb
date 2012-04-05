@@ -30,7 +30,8 @@ class Export
     "#{@name}/#{@arity}"
   end
   def is_otp_export
-    otp_exports = ["handle_call", "handle_cast", "start_link", "handle_info", "code_change", "start", "stop" ]
+    otp_exports = ["handle_call", "handle_cast", "start_link",
+    "handle_info", "code_change", "start", "stop" ]
     otp_exports.include? @name
   end
   def <=>(other)
@@ -38,23 +39,43 @@ class Export
   end
 end
 
+def collect_imports(file_path, mod, func, imports, include_otp)
+  imports[file_path] ||= {}
+  
+  if not include_otp and is_otp_module(mod)
+    return
+  end
+
+  this_mod = File.basename(file_path, '.*')
+
+  if this_mod == mod
+    # If a module uses its own function, it's not an export
+    return
+  end
+
+  imports[file_path][mod] ||= ErlangModule.new(mod)
+  imports[file_path][mod].import_function(func)
+end
+
 def find_imports(params = {})
+  mfa_call_regex = /\b([a-zA-Z][a-zA-Z0-9_]*):([a-z_][a-z0-9_]*)/
+  rpc_call_regex = /\brpc:call\(.*,\b*([a-zA-Z][a-zA-Z0-9_]*)\b*,\b*([a-z_][a-z0-9_]*)/
+
   directory = params[:directory] || "."
+  include_otp = params[:include_otp]
+
   imports = {}
+
   Find.find(directory) do |file_path|
     file_name = File.basename(file_path)
     if file_name =~ /\.erl$/
       IO.foreach(file_path) do |line|
         if not line =~ /^\b*%/
-          line.scan(/\b([a-zA-Z][a-zA-Z0-9_]*):([a-z_][a-z0-9_]*)/).each do |mod, func|
-            imports[file_path] ||= {}
-
-            if not params[:include_otp] and is_otp_module(mod)
-              next
-            end
-
-            imports[file_path][mod] ||= ErlangModule.new(mod)
-            imports[file_path][mod].import_function(func)
+          line.scan(mfa_call_regex).each do |mod, func|
+            collect_imports(file_path, mod, func, imports, include_otp)
+          end
+          line.scan(rpc_call_regex).each do |mod, func|
+            collect_imports(file_path, mod, func, imports, include_otp)
           end
         end
       end

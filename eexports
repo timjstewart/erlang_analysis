@@ -6,7 +6,7 @@ require_relative 'erlang'
 if ARGV.include?("-t") # use tree format
 
   find_exports.each do |file_path,exports|
-    puts "#{File.basename(file_path)}:"
+    puts "#{File.basename(file_path)}"
     exports.each_with_index do |export, index|
       if not export.is_otp_export
         if index < exports.length - 1
