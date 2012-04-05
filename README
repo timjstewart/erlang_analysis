@@ -6,31 +6,32 @@ Requirements:
 
 Installation:
 
-  chmod +x imports
-  chmod +x exports
+  chmod +x eimports
+  chmod +x eexports
+  chmod +x erefs
 
 Running:
 
-  ./imports                # parse all erlang source files in current directory
-                           # and display their imports in colon delimited format
+  ./eimports              # parse all erlang source files in current directory
+                          # and display their imports in colon delimited format
 
-  ./imports -t             # parse all erlang source files in current directory 
-                           # and display their imports as a tree.
+  ./eimports -t           # parse all erlang source files in current directory 
+                          # and display their imports as a tree.
 
 
-  ./exports                # parse all erlang source files in current directory 
-                           # and display their imports in colon delimited format
+  ./eexports              # parse all erlang source files in current directory 
+                          # and display their imports in colon delimited format
 
-  ./exports -t             # parse all erlang source files in current directory 
-                           # and display their imports as a tree.
+  ./eexports -t           # parse all erlang source files in current directory 
+                          # and display their imports as a tree.
 
-  ./imports -t -e          # parse all erlang source files in current directory 
-                           # and display their imports as a tree (excluding OTP
-                           # modules).
+  ./eimports -t -e        # parse all erlang source files in current directory 
+                          # and display their imports as a tree (excluding OTP
+                          # modules).
 
-  ./erefs module:function  # parse all erlang source files in current directory
-                           # and print all modules that call module:function
+  ./erefs module:function # parse all erlang source files in current directory
+                          # and print all modules that call module:function
 
-  ./erefs function         # parse all erlang source files in current directory
-                           # and print all modules that call function regardless
-                           # of the module.
+  ./erefs function        # parse all erlang source files in current directory
+                          # and print all modules that call function regardless
+                          # of the module.
