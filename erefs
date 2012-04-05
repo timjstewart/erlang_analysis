@@ -2,33 +2,42 @@
 # -*- coding: utf-8 -*-
 require_relative "erlang"
 
+$human_readable = ARGV.include?("-h")
+
+def print_ref(file_path, mod_name, func_name)
+  if $human_readable
+    puts "#{file_path} => #{mod_name}:#{func_name}(...)"
+  else
+    puts "#{file_path}:#{mod_name}:#{func_name}"
+  end
+end
+
 if ARGV.length >= 1
   query_mod = query_func = nil
   if ARGV[0] =~ /([a-zA-Z_][a-zA-Z0-9_]*):([a-z_][a-z0-9_]*)/
     query_mod = $1
     query_func = $2
   else
-    query_func = ARGV[0]
+    query = ARGV[0]
   end
 
   find_imports.each do |file_path, mod|
     mod.each do |mod_name,x|
       if query_mod == mod_name
         if x.functions.include?(query_func)
-          if ARGV.include?("-h")
-            puts "#{file_path} => #{query_mod}:#{query_func}(...)"
-          else
-            puts "#{file_path}:#{query_mod}:#{query_func}"
-          end
+          print_ref(file_path, query_mod, query_func)
           break
         end
-      elsif !query_mod and x.functions.include?(query_func)
-        if ARGV.include?("-h")
-          puts "#{file_path} => #{mod_name}:#{query_func}(...)"
-        else
-          puts "#{file_path}:#{mod_name}:#{query_func}"
+      elsif query
+        if x.functions.include?(query)
+          print_ref(file_path, mod_name, query)
+          break
         end
-        break
+        if mod_name == query
+          x.functions.each do |func_name|
+            print_ref(file_path, mod_name, func_name)
+          end
+        end
       end
     end
   end
